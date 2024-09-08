@@ -117,40 +117,49 @@ export const register = async (req, res) => {
 };
 
 // Login user
+// Login user
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
+    
+    // Check if all fields are provided
     if (!email || !password || !role) {
       return res.status(400).json({
         message: "Something is missing",
         success: false,
-      })
+      });
     }
+
+    // Find user by email
     let user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
         message: "Incorrect email or password",
-        success: false
+        success: false,
       });
     }
+
+    // Compare the provided password with the stored hashed password
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       return res.status(400).json({
         message: "Incorrect email or password",
-        success: false
-      })
-    };
-    // Check role is correct or not
+        success: false,
+      });
+    }
+
+    // Check if the user role matches
     if (role !== user.role) {
       return res.status(400).json({
         message: "Account doesn't exist with correct role.",
         success: false,
       });
     }
-    // generate token
+
+    // Generate a JWT token
     const tokenData = {
-      userId: user._id
-    }
+      userId: user._id,
+    };
     const token = jwt.sign(tokenData, process.env.SECRET_KEY, { expiresIn: '1d' });
 
     user = {
@@ -159,19 +168,31 @@ export const login = async (req, res) => {
       email: user.email,
       phoneNumber: user.phoneNumber,
       role: user.role,
-      profile: user.profile
-    }
+      profile: user.profile,
+    };
 
-    // storing token in cookie
-    return res.status(200).cookie("token", token, { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' }).json({
-      message: `Welcome back ${user.fullname}`,
-      user,
-      success: true
-    })
+    // Set the token in a secure cookie
+    return res.status(200)
+      .cookie("token", token, {
+        httpOnly: true, // Prevent access via JavaScript
+        secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
+        sameSite: 'None', // Required for cross-site cookies
+        maxAge: 1 * 24 * 60 * 60 * 1000, // Cookie expires in 1 day
+      })
+      .json({
+        message: `Welcome back, ${user.fullname}`,
+        user,
+        success: true,
+      });
   } catch (error) {
-    console.log(error)
+    console.log("Error during login:", error);
+    res.status(500).json({
+      message: "Server error during login",
+      success: false,
+    });
   }
-}
+};
+
 
 // logout user
 export const logout = async (req, res) => {
