@@ -1,0 +1,6 @@
+            // Middleware  //
+
+Middleware request or response ke bich m work krta hai, jab hum request send krenge tab sbse pehle Middleware hi check hota h agar Middleware sabkuch pas kr deta hai 
+
+
+sbse pehle request aayegi then Middleware check krega iski sare cheeje proper tarike s thik hai ya nhi ,agar thik hai to aapko controller m bhej dega update profile m 

@@ -1,0 +1,36 @@
+// 1. in backend index.js i created server
+
+// in below how we created server 
+
+// import express, { urlencoded } from "express";
+// import cookiParser from "cookie-parser"
+// import cors from "cors";
+// const app = express();
+
+// // middleware
+// app.use(express.json()); // sending data in json format
+// app.use(express,urlencoded({extended:true})) // midd
+// app.use(cookiParser());
+// const corsOptions = {
+//   origin: "http://locahost:5173",
+//   Credentials:true
+// }
+// app.use(cors(corsOptions));
+
+// const PORT = 3000;
+
+// app.listen(PORT,()=>{
+//   console.log(`Server running at port ${PORT}`)
+// })
+
+
+
+   // 2. Creating a api in backend
+
+
+app.get("/home",(req,res)=> {
+  return res.status(200).json({
+    message: "I am coming from backend",
+    success:true
+  })
+})
