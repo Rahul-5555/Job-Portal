@@ -18,7 +18,7 @@ app.use(express.json()); // sending data in json format
 app.use(express.urlencoded({ extended: true })) // midd
 app.use(cookieParser());
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "https://jobportalrah.netlify.app/",
   credentials: true
 }
 app.use(cors(corsOptions));
