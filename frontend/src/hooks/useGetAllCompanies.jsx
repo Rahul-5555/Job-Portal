@@ -21,7 +21,7 @@ const useGetAllCompanies = () => {
       }
     }
     fetchCompanies(); // calling the function
-  }, [])
+  }, [dispatch])
 }
 
 export default useGetAllCompanies;
