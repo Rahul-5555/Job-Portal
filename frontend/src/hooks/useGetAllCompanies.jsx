@@ -1,36 +1,26 @@
-import { setAllAdminJobs } from '@/redux/jobSlice';
-import { JOB_API_ENDPOINT } from '@/utils/Constant';
-import axios from 'axios';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { setCompanies} from '@/redux/companySlice'
+import { COMPANY_API_ENDPOINT } from '@/utils/Constant'
+// import { COMPANY_API_END_POINT} from '@/utils/constant'
+import axios from 'axios'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
-const useGetAllAdminJobs = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const fetchAllAdminJobs = async () => {
-      try {
-        const res = await axios.get(`${JOB_API_ENDPOINT}/getadminjobs`, {
-          withCredentials: true,
-        });
-        
-        if (res.data.success) {
-          dispatch(setAllAdminJobs(res.data.jobs));
-        } else {
-          console.error('Error: Unable to fetch admin jobs. ', res.data.message);
+const useGetAllCompanies = () => {
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        const fetchCompanies = async () => {
+            try {
+                const res = await axios.get(`${COMPANY_API_ENDPOINT}/get`,{withCredentials:true});
+                console.log('called');
+                if(res.data.success){
+                    dispatch(setCompanies(res.data.companies));
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
-      } catch (error) {
-        console.error('Error fetching admin jobs:', error.response?.data || error.message);
-      }
-    };
+        fetchCompanies();
+    },[])
+}
 
-    fetchAllAdminJobs(); // Calling the function
-
-    // Optional: Cleanup (cancel the request if needed)
-    return () => {
-      // You can add logic to cancel the request if necessary, using axios.CancelToken
-    };
-  }, [dispatch]); // Add dispatch to the dependency array
-};
-
-export default useGetAllAdminJobs;
+export default useGetAllCompanies

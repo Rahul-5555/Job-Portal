@@ -12,7 +12,7 @@ import { setSingleCompany } from '@/redux/companySlice'
 
 const CompanyCreate = () => {
   const navigate = useNavigate();
-  const [companyName, setCompanyName] = useState();
+  const [companyName, setCompanyName] = useState('');
   const dispatch = useDispatch();
 
   // creating a function that works for continue button

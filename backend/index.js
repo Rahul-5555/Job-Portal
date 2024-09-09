@@ -17,13 +17,31 @@ app.use(express.json()); // sending data in JSON format
 app.use(express.urlencoded({ extended: true })); // middleware for form data
 app.use(cookieParser());
 
-// CORS configuration to handle both localhost (development) and the deployed URL (production)
+
+// const corsOptions = {
+//   origin: process.env.NODE_ENV === 'production'
+//     ? "https://jobportalrah.netlify.app" // Deployed frontend URL
+//     : "http://localhost:5173", // Development URL
+//   credentials: true
+// };
+// new thing start from here
+const allowedOrigins = [
+  'http://localhost:5173',  // Local development URL
+  'https://jobportalrah.netlify.app'  // Deployed frontend URL
+];
+
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'production'
-    ? "https://jobportalrah.netlify.app" // Deployed frontend URL
-    : "http://localhost:5173", // Development URL
-  credentials: true
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,  // Allow cookies and credentials to be sent
 };
+
+app.use(cors(corsOptions));
 
 app.use(cors(corsOptions));
 
