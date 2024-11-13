@@ -1,8 +1,8 @@
 import { User } from "../models/user.model.js";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";  // Used for hashing passwords.
 import jwt from "jsonwebtoken";
-import getDataUri from "../utils/datauri.js";
-import cloudinary from "../utils/cloudinary.js";
+import getDataUri from "../utils/datauri.js"; // Utility to transform file data into a format compatible with Cloudinary.
+import cloudinary from "../utils/cloudinary.js"; //Used for uploading profile photos.
 
 // Register User
 // export const register = async (req, res) => {
@@ -60,7 +60,8 @@ export const register = async (req, res) => {
         success: false,
       });
     }
-
+    
+    // User Existence: Checks if a user with the provided email already exists. If so, it returns a 400 error.
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -90,7 +91,8 @@ export const register = async (req, res) => {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    
+    // User Creation: Creates a new user and stores their hashed password and profile photo URL in the database.
     // Create a new user
     await User.create({
       fullname,
@@ -119,6 +121,7 @@ export const register = async (req, res) => {
 // Login user
 export const login = async (req, res) => {
   try {
+    // Validation: Ensures that all fields (email, password, role) are provided. If not, returns a 400 error.
     const { email, password, role } = req.body;
     if (!email || !password || !role) {
       return res.status(400).json({
@@ -126,6 +129,7 @@ export const login = async (req, res) => {
         success: false,
       })
     }
+    // User Verification: Checks if the user exists and verifies the password using bcrypt.compare(). If the credentials are incorrect, returns a 400 error.
     let user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
@@ -140,14 +144,14 @@ export const login = async (req, res) => {
         success: false
       })
     };
-    // Check role is correct or not
+    // Role Check: Ensures that the user's role matches the one provided. If not, returns a 400 error.
     if (role !== user.role) {
       return res.status(400).json({
         message: "Account doesn't exist with correct role.",
         success: false,
       });
     }
-    // generate token
+    // Token Generation: Creates a JWT token that includes the user's ID and stores it as a cookie.
     const tokenData = {
       userId: user._id
     }
@@ -250,6 +254,7 @@ export const login = async (req, res) => {
 
 
 // logout user
+// Clears the JWT token by setting an empty cookie with maxAge: 0, effectively logging the user out.
 export const logout = async (req, res) => {
   try {
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({
@@ -264,6 +269,7 @@ export const logout = async (req, res) => {
 // update profile
 export const updateProfile = async (req, res) => {
   try {
+    // Validation: Extracts profile details from req.body, including optional file uploads for resumes.
     const { fullname, email, phoneNumber, bio, skills } = req.body;
     // console.log( fullname, email, phoneNumber, bio, skills)
     const file = req.file;
@@ -321,3 +327,13 @@ export const updateProfile = async (req, res) => {
     console.log(error)
   }
 }
+
+
+
+// Explanation of How it Works:
+
+// The controller interacts with the User model to handle user data stored in a MongoDB database.
+// It handles file uploads (profile photos, resumes) using Cloudinary.
+// Password encryption is done with bcryptjs to store passwords securely in the database.
+// Authentication is handled via JWT, and the token is stored as a cookie for authentication in subsequent requests.
+// This controller is essential for managing user authentication and profile handling within your job portal project. Let me know if you need a detailed breakdown of other parts of the backend or further clarification on any section!

@@ -43,7 +43,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 3000;
 

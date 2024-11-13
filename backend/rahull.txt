@@ -1,0 +1,197 @@
+               // 1. MONGODB  //
+
+1. MongoDB (Database Layer)
+MongoDB is a NoSQL database that stores data in flexible, JSON-like documents. It allows for the storage of unstructured data, making it scalable for different applications.
+
+Operations: CRUD operations (Create, Read, Update, Delete) are handled using MongoDB queries. For example:
+1. create() to add new documents
+2. find() to retrieve documents
+3. update() to modify documents
+4. delete() to remove documents
+
+
+
+             // 2. Express (Web Framework) //
+Express.js is a minimal and flexible web application framework for Node.js that provides a robust set of features to build web and mobile applications.
+It handles routing (defining URLs for your API), middleware (like authentication), and much more.
+
+Routing example:
+
+app.get('/api/users', (req, res) => {
+  // Logic to get users from the database
+  res.send(users);
+});
+
+You use controllers to keep your routes clean by placing logic in separate files.
+
+
+
+         // 3. Node.js (Runtime Environment)  //
+
+Node.js is a JavaScript runtime that allows you to execute JavaScript code outside a browser.
+It uses an event-driven, non-blocking I/O model, which makes it efficient and suitable for scalable applications.
+
+It uses an event-driven, non-blocking I/O model, which makes it efficient and suitable for scalable applications.
+
+API example
+
+const express = require('express');
+const app = express();
+
+app.listen(5000, () => {
+  console.log('Server is running on port 5000');
+});
+
+
+               // 4. Mongoose (ODM for MongoDB)  //
+
+Mongoose is used for MongoDB object modeling. It provides a schema-based solution to model data and has useful features like validation, type casting, and query building
+
+Model Example:
+
+const mongoose = require('mongoose');
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+});
+
+const User = mongoose.model('User', UserSchema);
+
+
+
+MERN Backend Flow:
+
+1. Client Request: The user (client) sends a request to the backend.
+
+2. Express Routing: The request hits an Express route (e.g., /api/users).
+
+3. Controller Logic: The controller processes the request (e.g., fetching data from MongoDB).
+
+4. MongoDB: Data is fetched, updated, or deleted in MongoDB.
+
+5. Response: The server sends back a response to the client.
+
+
+
+                 // REMEMBER //
+
+User backend ko request send krta hai fir ye request express route ko hit krti hai (/api/user) fir controlller iss request ko process krta hai (means logic likhta h request s MongoDB data ko fetch krne ki) fir mongodb data ko fetched, updated or deleted krta according to request then server send back a response to the client(user)
+
+
+
+
+                 // QUESTIONS //
+
+ 1. What is the role of MongoDB in the MERN stack?
+Answer: MongoDB is the database layer in the MERN stack. It stores data in the form of JSON-like documents, allowing flexible schema designs and easy scaling.       
+
+
+
+2. Explain how to define a Mongoose model for storing users in a MongoDB database. Provide an example.
+
+const mongoose = require('mongoose');
+
+const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
+
+const User = mongoose.model('User', UserSchema);
+module.exports = User;
+
+
+
+3. How does Express handle routing in the backend? Explain with an example route for fetching users.
+
+Example Answer:
+
+const express = require('express');
+const app = express();
+
+// Example of a GET route to fetch users
+app.get('/api/users', (req, res) => {
+  // Logic to fetch users from the database
+  res.json({ message: "Fetched users" });
+});
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});
+
+
+
+
+4. What is middleware in Express, and how can it be used to handle user authentication?
+
+Example Answer: Middleware is a function that has access to the request and response objects, as well as the next function in the application's request-response cycle. It can be used to perform tasks such as authentication.
+
+
+const checkAuth = (req, res, next) => {
+  const token = req.headers['authorization'];
+
+  if (token === 'validToken') {
+    next(); // Move on to the next middleware/route handler
+  } else {
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+};
+
+app.get('/api/secure-data', checkAuth, (req, res) => {
+  res.json({ message: 'Secure data' });
+});
+
+
+
+
+5. What is the purpose of controllers in an Express application?
+Answer: Controllers are used to separate logic from route definitions, keeping the code organized and reusable. They handle business logic like processing data, interacting with the database, and sending responses back to the client.
+
+
+
+
+6. How can you connect your backend to a MongoDB database using Mongoose? Provide a code example.
+
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/mydatabase', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  console.log('Connected to MongoDB');
+})
+.catch((err) => {
+  console.error('Error connecting to MongoDB', err);
+});
+
+
+
+7. What is the role of app.listen() in a Node.js application?
+Answer: app.listen() is used to bind and listen for connections on the specified host and port. It essentially starts the server and listens for incoming requests.
+
+
+
+
+8. 8. Describe how you can handle errors in an Express route. Provide an example.
+
+
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find(); // Assuming `User` is a Mongoose model
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
