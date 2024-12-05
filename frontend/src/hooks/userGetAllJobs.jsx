@@ -15,11 +15,12 @@ const userGetAllJobs = () => {
           withCredentials: true,
         });
 
+
         if (res.data.success) {
           dispatch(setAllJobs(res.data.jobs));
         }
       } catch (error) {
-        console.log(error)
+        console.error("Error in [ComponentName]:", error);
       }
     }
     fetchAllJobs(); // calling the function
