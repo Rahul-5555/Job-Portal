@@ -25,21 +25,16 @@ app.use(cookieParser());
 //   credentials: true
 // };
 // new thing start from here
-const allowedOrigins = [
-  'http://localhost:5173',  // Local development URL
-  'https://jobportalrah.netlify.app'  // Deployed frontend URL
-];
+// const allowedOrigins = [
+//   'http://localhost:5173',  // Local development URL
+//   'https://jobportalrah.netlify.app'  // Deployed frontend URL
+// ];
+
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,  // Allow cookies and credentials to be sent
-};
+  origin: 'http://localhost:5173',
+  credentials: true
+}
 
 app.use(cors(corsOptions));
 
