@@ -14,17 +14,15 @@ const userGetAllJobs = () => {
         const res = await axios.get(`${JOB_API_ENDPOINT}/get?keyword=${searchedQuery}`, {
           withCredentials: true,
         });
-
-
         if (res.data.success) {
           dispatch(setAllJobs(res.data.jobs));
         }
       } catch (error) {
-        console.error("Error in [ComponentName]:", error);
+        console.error(error);
       }
     }
     fetchAllJobs(); // calling the function
-  }, [searchedQuery, dispatch])
+  }, [])
 }
 
 export default userGetAllJobs
