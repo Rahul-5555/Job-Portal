@@ -19,7 +19,8 @@ app.use(cookieParser());
 
 const allowedOrigins = [
   'http://localhost:5173',  // Local development URL
-  'https://jobportalrah.netlify.app'  // Deployed frontend URL
+  'https://jobportalrah.netlify.app', // Deployed frontend URL
+  'https://job-portal-v98d.onrender.com'
 ];
 
 const corsOptions = {
