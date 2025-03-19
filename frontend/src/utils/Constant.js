@@ -1,4 +1,5 @@
 // Use dynamic environment variables to switch between localhost and deployed backend
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 export const USER_API_ENDPOINT = process.env.NODE_ENV === 'production'
   ? "https://job-portal-v98d.onrender.com/api/v1/user"
