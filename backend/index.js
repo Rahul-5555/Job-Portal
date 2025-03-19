@@ -12,36 +12,34 @@ dotenv.config();
 
 const app = express();
 
-// middleware
-app.use(express.json()); // sending data in JSON format
-app.use(express.urlencoded({ extended: true })); // middleware for form data
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-
-// const corsOptions = {
-//   origin: process.env.NODE_ENV === 'production'
-//     ? "https://jobportalrah.netlify.app" // Deployed frontend URL
-//     : "http://localhost:5173", // Development URL
-//   credentials: true
-// };
-// new thing start from here
-// const allowedOrigins = [
-//   'http://localhost:5173',  // Local development URL
-//   'https://jobportalrah.netlify.app'  // Deployed frontend URL
-// ];
-
+const allowedOrigins = [
+  'http://localhost:5173',  // Local development URL
+  'https://jobportalrah.netlify.app'  // Deployed frontend URL
+];
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
-  credentials: true
-}
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // Allow cookies and authentication headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'] // Allow specific headers
+};
 
 app.use(cors(corsOptions));
 
-
 const PORT = process.env.PORT || 8000;
 
-// API routes
+// API Routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/company", companyRoute);
 app.use("/api/v1/job", jobRoute);
