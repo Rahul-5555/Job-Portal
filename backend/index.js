@@ -1,4 +1,4 @@
-import express, { urlencoded } from "express";
+import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -39,7 +39,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 // API routes
 app.use("/api/v1/user", userRoute);
